@@ -1,0 +1,30 @@
+Error in Test ID: 67 (Function: isprint)
+Expected: [0]
+Got     : [1]
+-------------------------------------
+Error in Test ID: 307 (Function: strnstr)
+Expected: [1]
+Got     : [0]
+-------------------------------------
+Error in Test ID: 315 (Function: strnstr)
+Expected: [1]
+Got     : [0]
+-------------------------------------
+Error in Test ID: 412 (Function: split)
+Expected: [1]
+Got     : [0]
+-------------------------------------
+Error in Test ID: 417 (Function: split)
+Expected: [1]
+Got     : [0]
+-------------------------------------
+-------------------------------------
+Test ID: 545 (Function: lstadd_front)
+Result:  SEGMENTATION FAULT (CRASH)
+-------------------------------------
+Test ID: 546 (Function: lstadd_front)
+Result:  SEGMENTATION FAULT (CRASH)
+Error in Test ID: 619 (Function: lstmap)
+Expected: [1]
+Got     : [0]
+-------------------------------------
