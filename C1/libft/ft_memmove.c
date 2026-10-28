@@ -19,10 +19,7 @@ void	*ft_memmove(void *dest, const void *src, size_t n)
 	size_t		i;
 
 	i = 0;
-	s = src;                                            // ! SRC :                          A B C D E  
-														// ! DEST : SRCC  + 2 = C D E ----> A B A D E ---> 
-														//!									A B A B E ----> 
-														//!									A B A B A
+	s = src;
 	d = dest;
 	while (i < n)
 	{
