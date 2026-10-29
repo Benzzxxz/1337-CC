@@ -12,6 +12,7 @@
 
 #include "libft.h"
 
+
 char	*ft_strchr(const char *s, int c)
 {
 	unsigned char	t;
@@ -19,11 +20,11 @@ char	*ft_strchr(const char *s, int c)
 	t = c;
 	while (*s)
 	{
-		if (*s == t)
+		if ((unsigned char)*s == t)
 			return ((char *)s);
 		s++;
 	}
-	if (*s == t)
+	if ((unsigned char)*s == t)
 		return ((char *)s);
 	return (NULL);
 }

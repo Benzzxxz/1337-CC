@@ -27,3 +27,8 @@ void	*ft_memset(void *s, int c, size_t n)
 	}
 	return (s);
 }
+int main()
+{
+	int *p = {202020, 2, 3, 4, 5, 6}
+	ft_memset(p[])
+}

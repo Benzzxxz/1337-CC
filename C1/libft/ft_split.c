@@ -21,11 +21,12 @@ static int	countwords(char *s, char c)
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] != c)
+		if (s[i] && s[i] != c)
 			j++;
 		while (s[i] && s[i] != c)
 			i++;
-		i++;
+		if (s[i])
+			i++;
 	}
 	return (j);
 }
@@ -36,7 +37,10 @@ static void	frall(char **s, int size)
 
 	i = 0;
 	while (i < size)
+	{
 		free(s[i]);
+		i++;
+	}
 	free(s);
 }
 
@@ -86,6 +90,8 @@ char	**ft_split(char const *s, char c)
 	int		words;
 	char	**res;
 
+	if (!s)
+		return (NULL);
 	words = countwords((char *)s, c);
 	res = malloc(sizeof(char **) * (words + 1));
 	if (!res)
