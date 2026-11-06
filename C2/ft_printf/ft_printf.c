@@ -1,6 +1,6 @@
 #include "ft_printf.h"
 
-int dispatcher(va_list v, char c)
+int	dispatcher(va_list v, char c)
 {
 	size_t	count;
 
@@ -11,17 +11,17 @@ int dispatcher(va_list v, char c)
 		count++;
 	}
 	if (c == 's')
-	{
 		count = putstr(va_arg(v, char *));
-	}
 	if (c == 'i')
-	{
 		count = ft_putnbr(va_arg(v, int));
-	}
+	if (c == 'x')
+		count = put_hex(va_arg(v, int), 0);
+	if (c == 'X')
+		count = put_hex(va_arg(v, int), 1);
 	return (count);
 }
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
 	va_list	v;
 	int		i;
@@ -48,6 +48,6 @@ int ft_printf(const char *format, ...)
 }
 int main()
 {
-	int i = ft_printf("benzz %c here %i", 'c', 1916);
+	int i = ft_printf("%i\nin lower hex is %x \nin upper hex is %X", 127, 127, 127);
 	printf("\n%d", i);
 }

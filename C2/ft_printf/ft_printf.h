@@ -88,6 +88,35 @@ int	ft_putnbr(int n)
 	return (countnum(n));
 }
 
+void upper(char *s)
+{
+	while (*s)
+	{
+		if (*s >= 'a' && *s <= 'f')
+			*s = *s - 32;
+		s++;
+	}
+}
+
+int put_hex(int nb, int cs)
+{
+	int i;
+	char hex[17] = "0123456789abcdef";
+	char c[20];
+
+	i = 0;
+	if (cs)
+		upper(hex);
+	while (nb > 0)
+	{
+		c[i] = hex[nb % 16];
+		nb /= 16;
+		i++;
+	}
+	putstr(c);
+	return (i);
+}
+
 
 
 #endif
