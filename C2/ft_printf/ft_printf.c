@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: abenzago <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/11/06 17:48:18 by abenzago          #+#    #+#             */
+/*   Updated: 2026/11/06 17:48:20 by abenzago         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
 int	dispatcher(va_list v, char c)
@@ -15,9 +27,11 @@ int	dispatcher(va_list v, char c)
 	if (c == 'i')
 		count = ft_putnbr(va_arg(v, int));
 	if (c == 'x')
-		count = put_hex(va_arg(v, int), 0);
+		count = put_hex((long)va_arg(v, int), 0);
 	if (c == 'X')
-		count = put_hex(va_arg(v, int), 1);
+		count = put_hex((long)va_arg(v, int), 1);
+	if (c == 'p')
+		count = put_addr(va_arg(v, void *));
 	return (count);
 }
 
@@ -48,6 +62,7 @@ int	ft_printf(const char *format, ...)
 }
 int main()
 {
-	int i = ft_printf("%i\nin lower hex is %x \nin upper hex is %X", 127, 127, 127);
-	printf("\n%d", i);
+	int i = 42;
+	printf("printf :    %x\n", i);
+	ft_printf("ft_printf : %x", i);
 }

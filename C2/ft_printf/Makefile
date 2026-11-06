@@ -3,22 +3,24 @@ NAME = ft_printf.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = ft_printf.c libft.a
+SRC = ft_dec.c ft_hex.c ft_string.c
 
 OBJS = $(SRC:.c=.o)
 
-all : $(NAME)
-	ar rcs $(SRC) -o $(NAME);
+all: $(NAME)
+ 
+$(NAME) : $(OBJS) 
+	ar rcs $(NAME) $(OBJS)
 
-$(NAME) : $(OBJS)
+%.o: %.c ft_printf.h
+	$(CC) $(CFLAGS) -c $< -o $@
 
-%.o : %.c
-	$(CC) $(CFLAGS) $(SRC) -o $(OBJS)
+clean:
+	rm -f $(OBJS)
 
-clean :
-	rm $(OBJS)
-
-fclean : claen
-	rm $(NAME)
+fclean: clean
+	rm -f $(NAME)
+	
+re: fclean all
 
 .PHONY : all clean fclean
