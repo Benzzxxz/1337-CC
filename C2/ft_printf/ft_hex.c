@@ -12,43 +12,35 @@
 
 #include "ft_printf.h"
 
-static void upper(char *s)
+int	put_hex(long nb, int cs)
 {
-	while (*s)
-	{
-		if (*s >= 'a' && *s <= 'f')
-			*s = *s - 32;
-		s++;
-	}
-}
-
-int put_hex(long nb, int cs)
-{
-	int i;
-	char hex[17] = "0123456789abcdef";
-	char c[17];
+	int		i;
+	char	*hex;
+	char	c[17];
 
 	i = 0;
 	if (cs)
-		upper(hex);
+		hex = "0123456789ABCDEF";
+	else
+		hex = "0123456789abcdef";
 	while (nb > 0)
 	{
 		c[i] = hex[nb % 16];
 		nb /= 16;
 		i++;
 	}
-	putstr(c);
+	c[i] = '\0';
+	rev_putstr(c);
 	return (i);
 }
 
-int put_addr(void *p)
+int	put_addr(void *p)
 {
 	unsigned long	nb;
 	int				i;
-	
+
 	write(1, "0x", 2);
 	nb = (unsigned long)p;
 	i = put_hex(nb, 0);
-	//printf("\n%ld", nb);
 	return (i);
 }

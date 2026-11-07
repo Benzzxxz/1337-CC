@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	dispatcher(va_list v, char c)
+size_t	dispatcher(va_list v, char c)
 {
 	size_t	count;
 
@@ -23,7 +23,7 @@ int	dispatcher(va_list v, char c)
 		count++;
 	}
 	if (c == 's')
-		count = putstr(va_arg(v, char *));
+		count = ft_putstr(va_arg(v, char *));
 	if (c == 'i')
 		count = ft_putnbr(va_arg(v, int));
 	if (c == 'x')
@@ -32,6 +32,11 @@ int	dispatcher(va_list v, char c)
 		count = put_hex((long)va_arg(v, int), 1);
 	if (c == 'p')
 		count = put_addr(va_arg(v, void *));
+	if (c == '%')
+	{
+		ft_putchar('%');
+		count++;
+	}
 	return (count);
 }
 
@@ -46,9 +51,9 @@ int	ft_printf(const char *format, ...)
 	va_start(v, format);
 	while (format[i])
 	{
-		if (format[i] == '%' && ft_memchr("cspdiuxX", format[i + 1], 8))
+		if (format[i] == '%' && ft_memchr("cspdiuxX%", format[i + 1], 9))
 		{
-			count += dispatcher(v, ft_memchr("cspdiuxX", format[i + 1], 8));
+			count += dispatcher(v, ft_memchr("cspdiuxX%", format[i + 1], 9));
 			i++;
 		}
 		else
@@ -63,6 +68,8 @@ int	ft_printf(const char *format, ...)
 int main()
 {
 	int i = 42;
-	printf("printf :    %x\n", i);
-	ft_printf("ft_printf : %x", i);
+	int j = printf("rl_printf:  %%  %x", i);
+	printf(" ---> %d \n", j);
+	j = ft_printf("ft_printf:  %%  %X", i);
+	printf(" ---> %d \n", j);
 }

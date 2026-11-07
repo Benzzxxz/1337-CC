@@ -21,10 +21,11 @@
 char	ft_memchr(const void *s, int c, size_t n);
 size_t	ft_strlen(const char *s);
 void	ft_putchar(char c);
-int		putstr(char *s);
+size_t	ft_putstr(char *s);
 int		countnum(int nb);
 int		ft_putnbr(int n);
 int		put_hex(long nb, int cs);
-int 	put_addr(void *p);
+int		put_addr(void *p);
+void	rev_putstr(char *s);
 
 #endif

@@ -39,10 +39,22 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-int	putstr(char *s)
+size_t	ft_putstr(char *s)
 {
 	if (!s)
 		return (0);
 	write(1, s, ft_strlen(s));
 	return (ft_strlen(s));
+}
+
+void	rev_putstr(char *s)
+{
+	size_t	i;
+
+	i = ft_strlen(s);
+	while (i > 0)
+	{
+		ft_putchar(s[i - 1]);
+		i--;
+	}
 }

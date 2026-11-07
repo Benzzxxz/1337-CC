@@ -17,9 +17,9 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-int countnum(int nb)
+int	countnum(int nb)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (nb > 0)
@@ -50,9 +50,8 @@ int	ft_putnbr(int n)
 	}
 	while (nb > 0)
 	{
-		res[i] = nb % 10 + '0';
+		res[i++] = nb % 10 + '0';
 		nb /= 10;
-		i++;
 	}
 	i--;
 	while (i >= 0)
