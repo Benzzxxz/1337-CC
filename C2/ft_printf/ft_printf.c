@@ -14,32 +14,22 @@
 
 int	dispatcher(va_list v, char c) 
 {
-	int	count;
-
-	count = 0;
 	if (c == 'c')
-	{
-		ft_putchar((char)va_arg(v, int));
-		count++;
-	}
+		return (ft_putchar((char)va_arg(v, int)), 1);
 	if (c == 's')
-		count = ft_putstr(va_arg(v, char *));
+		return (ft_putstr(va_arg(v, char *)));
 	if (c == 'i' || c == 'd')
-		count = ft_putnbr(va_arg(v, int));
+		return (ft_putnbr(va_arg(v, int)));
 	if (c == 'x')
-		count = put_hex((long)va_arg(v, unsigned int), 0);
+		return (put_hex(va_arg(v, unsigned int), 0));
 	if (c == 'X')
-		count = put_hex((long)va_arg(v, unsigned int), 1);
+		return  (put_hex(va_arg(v, unsigned int), 1));
 	if (c == 'p')
-		count = put_addr(va_arg(v, void *));
+		return (put_addr(va_arg(v, void *)));
 	if (c == 'u')
-		count = ft_putunsinged(va_arg(v, unsigned int));
+		return (ft_putnbr(va_arg(v, unsigned int)));
 	if (c == '%')
-	{
-		ft_putchar('%');
-		count++;
-	}
-	return (count);
+		return (ft_putchar('%'), 1);
 }
 
 int	ft_printf(const char *format, ...)
@@ -71,103 +61,146 @@ int	ft_printf(const char *format, ...)
 	return ((int)count);
 }
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <limits.h>
 #include "ft_printf.h"
 
+#define TMP_FILE "/tmp/ft_printf_test.txt"
+#define BUF_SIZE 4096
+
+static int	g_saved_fd;
+static int	g_total;
+static int	g_passed;
+
+static void	start_capture(void)
+{
+	int	fd;
+
+	fflush(stdout);
+	g_saved_fd = dup(1);
+	fd = open(TMP_FILE, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	dup2(fd, 1);
+	close(fd);
+}
+
+static int	stop_capture(char *buf)
+{
+	int	fd;
+	int	n;
+
+	fflush(stdout);
+	dup2(g_saved_fd, 1);
+	close(g_saved_fd);
+	fd = open(TMP_FILE, O_RDONLY);
+	n = read(fd, buf, BUF_SIZE - 1);
+	close(fd);
+	if (n < 0)
+		n = 0;
+	buf[n] = '\0';
+	return (n);
+}
+
+static void	report(const char *name, char *real, int lreal, int rreal,
+				char *mine, int lmine, int rmine)
+{
+	int	same_out;
+	int	same_ret;
+
+	same_out = (lreal == lmine && memcmp(real, mine, lreal) == 0);
+	same_ret = (rreal == rmine);
+	g_total++;
+	if (same_out && same_ret)
+	{
+		g_passed++;
+		printf("✅ %s\n", name);
+		return ;
+	}
+	printf("❌ %s\n", name);
+	if (!same_out)
+		printf("      output -> real: |%s|   mine: |%s|\n", real, mine);
+	if (!same_ret)
+		printf("      return -> real: %d   mine: %d\n", rreal, rmine);
+}
+
+#define T(name, ...) do { \
+	char	b1[BUF_SIZE]; \
+	char	b2[BUF_SIZE]; \
+	int		r1; \
+	int		r2; \
+	int		l1; \
+	int		l2; \
+	start_capture(); \
+	r1 = printf(__VA_ARGS__); \
+	l1 = stop_capture(b1); \
+	start_capture(); \
+	r2 = ft_printf(__VA_ARGS__); \
+	l2 = stop_capture(b2); \
+	report(name, b1, l1, r1, b2, l2, r2); \
+} while (0)
+
 int	main(void)
 {
-	int		r1;
-	int		r2;
-	char	*null_str;
-	void	*null_ptr;
-	int		x;
+	int	x = 42;
 
-	null_str = NULL;
-	null_ptr = NULL;
-	x = 42;
+	printf("--- %%c ---\n");
+	T("c letter", "%c", 'A');
+	T("c space", "%c", ' ');
+	T("c nul byte", "%c", 0);
 
-	/* %c */
-	r1 = printf("[c] real: %c|\n", 'A');
-	r2 = ft_printf("[c] mine: %c|\n", 'A');
-	printf("returns: %d vs %d\n\n", r1, r2);
+	printf("--- %%s ---\n");
+	T("s normal", "%s", "hello");
+	T("s empty", "%s", "");
+	T("s NULL", "%s", (char *)NULL);
+	T("s with percent inside", "%s", "100%");
 
-	/* %s */
-	r1 = printf("[s] real: %s|\n", "hello");
-	r2 = ft_printf("[s] mine: %s|\n", "hello");
-	printf("returns: %d vs %d\n\n", r1, r2);
+	printf("--- %%d / %%i ---\n");
+	T("d zero", "%d", 0);
+	T("d positive", "%d", 7);
+	T("d negative", "%d", -7);
+	T("i positive", "%i", 123);
+	T("i negative", "%i", -123);
+	T("d INT_MAX", "%d", INT_MAX);
+	T("d INT_MIN", "%d", INT_MIN);
 
-	/* %s empty string */
-	r1 = printf("[s empty] real: %s|\n", "");
-	r2 = ft_printf("[s empty] mine: %s|\n", "");
-	printf("returns: %d vs %d\n\n", r1, r2);
+	printf("--- %%u ---\n");
+	T("u zero", "%u", 0);
+	T("u normal", "%u", 42);
+	T("u UINT_MAX", "%u", UINT_MAX);
+	T("u of -1", "%u", -1);
 
-	/* %s NULL */
-	r1 = printf("[s NULL] real: %s|\n", null_str);
-	r2 = ft_printf("[s NULL] mine: %s|\n", null_str);
-	printf("returns: %d vs %d\n\n", r1, r2);
+	printf("--- %%x / %%X ---\n");
+	T("x zero", "%x", 0);
+	T("x 255", "%x", 255);
+	T("x 4096", "%x", 4096);
+	T("x of -1", "%x", -1);
+	T("x UINT_MAX", "%x", UINT_MAX);
+	T("X zero", "%X", 0);
+	T("X 255", "%X", 255);
+	T("X 48879", "%X", 48879);
+	T("X of -1", "%X", -1);
 
-	/* %d and %i */
-	r1 = printf("[d] real: %d %d %d|\n", 0, 7, -7);
-	r2 = ft_printf("[d] mine: %d %d %d|\n", 0, 7, -7);
-	printf("returns: %d vs %d\n\n", r1, r2);
+	printf("--- %%p ---\n");
+	T("p address", "%p", &x);
+	T("p NULL", "%p", (void *)0);
 
-	r1 = printf("[i] real: %i %i|\n", 123, -123);
-	r2 = ft_printf("[i] mine: %i %i|\n", 123, -123);
-	printf("returns: %d vs %d\n\n", r1, r2);
+	printf("--- %%%% ---\n");
+	T("percent alone", "%%");
+	T("percent in text", "100%%");
+	T("two percents", "%%%%");
 
-	/* limits */
-	r1 = printf("[limits] real: %d %d|\n", INT_MAX, INT_MIN);
-	r2 = ft_printf("[limits] mine: %d %d|\n", INT_MAX, INT_MIN);
-	printf("returns: %d vs %d\n\n", r1, r2);
+	printf("--- combos (bookmark test) ---\n");
+	T("plain text", "just text");
+	T("empty format", "");
+	T("d d", "%d %d", 10, 20);
+	T("adjacent dd", "%d%d", 10, 20);
+	T("text after conv", "%d apples", 5);
+	T("mix 5 types", "%d %s %c %x %u", 10, "abc", 'z', 255, 99);
+	T("mix with %%", "%d%%|%s|%c", 50, "ok", 'Z');
+	T("p then d", "%p %d", &x, 9);
 
-	/* %u */
-	r1 = printf("[u] real: %u %u %u|\n", 0, 42, UINT_MAX);
-	r2 = ft_printf("[u] mine: %u %u %u|\n", 0, 42, UINT_MAX);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	r1 = printf("[u neg] real: %u|\n", -1);
-	r2 = ft_printf("[u neg] mine: %u|\n", -1);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	/* %x and %X */
-	r1 = printf("[x] real: %x %x %x|\n", 0, 255, 4096);
-	r2 = ft_printf("[x] mine: %x %x %x|\n", 0, 255, 4096);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	r1 = printf("[X] real: %X %X|\n", 255, 48879);
-	r2 = ft_printf("[X] mine: %X %X|\n", 255, 48879);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	r1 = printf("[x neg] real: %x %X|\n", -1, -1);
-	r2 = ft_printf("[x neg] mine: %x %X|\n", -1, -1);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	r1 = printf("[x max] real: %x|\n", UINT_MAX);
-	r2 = ft_printf("[x max] mine: %x|\n", UINT_MAX);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	/* %p */
-	r1 = printf("[p] real: %p|\n", &x);
-	r2 = ft_printf("[p] mine: %p|\n", &x);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	r1 = printf("[p NULL] real: %p|\n", null_ptr);
-	r2 = ft_printf("[p NULL] mine: %p|\n", null_ptr);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	/* %% */
-	r1 = printf("[%%] real: 100%%|\n");
-	r2 = ft_printf("[%%] mine: 100%%|\n");
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	/* mixed: checks that EACH conversion consumes exactly ONE argument */
-	r1 = printf("[mix] real: %d %s %c %x %u|\n", 10, "abc", 'z', 255, 99);
-	r2 = ft_printf("[mix] mine: %d %s %c %x %u|\n", 10, "abc", 'z', 255, 99);
-	printf("returns: %d vs %d\n\n", r1, r2);
-
-	/* no conversion at all */
-	r1 = printf("[plain] real: just text|\n");
-	r2 = ft_printf("[plain] mine: just text|\n");
-	printf("returns: %d vs %d\n", r1, r2);
-	return (0);
+	printf("\n%d / %d tests passed\n", g_passed, g_total);
+	return (g_passed != g_total);
 }
+

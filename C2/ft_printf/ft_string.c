@@ -31,7 +31,7 @@ char	ft_memchr(const void *s, int c, size_t n)
 
 int	ft_strlen(const char *s)
 {
-	size_t	i;
+	int	i;
 
 	i = 0;
 	while (s[i])
@@ -42,7 +42,10 @@ int	ft_strlen(const char *s)
 int	ft_putstr(char *s)
 {
 	if (!s)
-		return (0);
+	{
+		write(1, "(null)", 6);
+		return (6);
+	}
 	write(1, s, ft_strlen(s));
 	return (ft_strlen(s));
 }

@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	put_hex(unsigned int nb, int cs)
+int	put_hex(long nb, int cs)
 {
 	int		i;
 	char	*hex;
@@ -23,6 +23,8 @@ int	put_hex(unsigned int nb, int cs)
 		hex = "0123456789ABCDEF";
 	else
 		hex = "0123456789abcdef";
+	if (nb == 0)
+		return (ft_putchar('0'), 1);
 	while (nb > 0)
 	{
 		c[i] = hex[nb % 16];
@@ -39,8 +41,13 @@ int	put_addr(void *p)
 	unsigned long	nb;
 	int				i;
 
+	if (p == NULL)
+	{
+		write(1, "(nil)", 5);
+		return (5);
+	}
 	write(1, "0x", 2);
 	nb = (unsigned long)p;
 	i = put_hex(nb, 0);
-	return (i);
+	return (i + 2);
 }
