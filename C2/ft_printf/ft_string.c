@@ -29,7 +29,7 @@ char	ft_memchr(const void *s, int c, size_t n)
 	return (0);
 }
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
 	size_t	i;
 
@@ -39,7 +39,7 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-size_t	ft_putstr(char *s)
+int	ft_putstr(char *s)
 {
 	if (!s)
 		return (0);

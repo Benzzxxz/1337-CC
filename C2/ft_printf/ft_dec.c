@@ -17,32 +17,18 @@ void	ft_putchar(char c)
 	write(1, &c, 1);
 }
 
-int	countnum(int nb)
-{
-	int	i;
-
-	i = 0;
-	while (nb > 0)
-	{
-		nb /= 10;
-		i++;
-	}
-	return (i);
-}
-
 int	ft_putnbr(int n)
 {
 	char	res[12];
 	int		i;
 	long	nb;
+	int		c;
 
+	c = 0;
 	nb = n;
 	i = 0;
-	if (n == 0)
-	{
-		ft_putchar('0');
-		return (0);
-	}
+	if (nb == 0)
+		return (ft_putchar('0'), 1);
 	if (nb < 0)
 	{
 		nb *= -1;
@@ -52,9 +38,34 @@ int	ft_putnbr(int n)
 	{
 		res[i++] = nb % 10 + '0';
 		nb /= 10;
+		c++;
 	}
 	i--;
 	while (i >= 0)
 		write(1, &res[i--], 1);
-	return (countnum(n));
+	return (c);
+}
+int	ft_putunsinged(unsigned int nb)
+{
+	char	res[12];
+	int		i;
+	int		c;
+
+	c = 0;
+	i = 0;
+	if (nb == 0)
+	{
+		ft_putchar('0');
+		return (1);
+	}
+	while (nb > 0)
+	{
+		res[i++] = nb % 10 + '0';
+		nb /= 10;
+		c++;
+	}
+	i--;
+	while (i >= 0)
+		write(1, &res[i--], 1);
+	return (c);
 }

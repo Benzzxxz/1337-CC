@@ -19,13 +19,13 @@
 # include <unistd.h>
 
 char	ft_memchr(const void *s, int c, size_t n);
-size_t	ft_strlen(const char *s);
+int		ft_strlen(const char *s);
 void	ft_putchar(char c);
-size_t	ft_putstr(char *s);
-int		countnum(int nb);
+int		ft_putstr(char *s);
 int		ft_putnbr(int n);
-int		put_hex(long nb, int cs);
+int		put_hex(unsigned int nb, int cs);
 int		put_addr(void *p);
+int		ft_putunsinged(unsigned int nb);
 void	rev_putstr(char *s);
 
 #endif
