@@ -27,5 +27,6 @@ int		put_hex(long nb, int cs);
 int		put_addr(void *p);
 int		ft_putunsinged(unsigned int nb);
 void	rev_putstr(char *s);
+int     ft_printf(const char *format, ...);
 
 #endif
