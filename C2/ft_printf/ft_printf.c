@@ -12,10 +12,10 @@
 
 #include "ft_printf.h"
 
-static int	dispatcher(va_list v, char c) 
+static int	dispatcher(va_list v, char c)
 {
 	if (c == 'c')
-		return (ft_putchar((char)va_arg(v, int)), 1);
+		return (ft_putchar((char)va_arg(v, int)));
 	if (c == 's')
 		return (ft_putstr(va_arg(v, char *)));
 	if (c == 'i' || c == 'd')
@@ -23,7 +23,7 @@ static int	dispatcher(va_list v, char c)
 	if (c == 'x')
 		return (put_hex(va_arg(v, unsigned int), 0));
 	if (c == 'X')
-		return  (put_hex(va_arg(v, unsigned int), 1));
+		return (put_hex(va_arg(v, unsigned int), 1));
 	if (c == 'p')
 		return (put_addr(va_arg(v, void *)));
 	if (c == 'u')
@@ -37,7 +37,7 @@ int	ft_printf(const char *format, ...)
 {
 	va_list	v;
 	int		i;
-	int	count;
+	int		count;
 
 	count = 0;
 	i = 0;
@@ -52,10 +52,9 @@ int	ft_printf(const char *format, ...)
 			i++;
 		}
 		else
-		{
-			ft_putchar(format[i]);
-			count++;
-		}
+			count += ft_putchar(format[i]);
+		if (count == -1)
+			break ;
 		i++;
 	}
 	va_end(v);

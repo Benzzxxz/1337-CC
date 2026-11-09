@@ -12,12 +12,14 @@
 
 #include "ft_printf.h"
 
-void	ft_putchar(char c)
+int	ft_putchar(char c)
 {
-	write(1, &c, 1);
+	if (write(1, &c, 1) == -1)
+		return (-1);
+	return (1);
 }
 
-static int neg_check(long nb)
+static int	neg_check(long nb)
 {
 	if (nb < 0)
 		return (1);
@@ -36,7 +38,7 @@ int	ft_putnbr(long n)
 	nb = n;
 	i = 0;
 	if (nb == 0)
-		return (ft_putchar('0'), 1);
+		return (ft_putchar('0'));
 	if (nb < 0)
 	{
 		nb *= -1;

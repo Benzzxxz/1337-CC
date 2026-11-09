@@ -57,7 +57,7 @@ void	rev_putstr(char *s)
 	i = ft_strlen(s);
 	while (i > 0)
 	{
-		ft_putchar(s[i - 1]);
+		write(1, &s[i - 1], 1);
 		i--;
 	}
 }

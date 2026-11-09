@@ -24,7 +24,7 @@ int	put_hex(long nb, int cs)
 	else
 		hex = "0123456789abcdef";
 	if (nb == 0)
-		return (ft_putchar('0'), 1);
+		return (ft_putchar('0'));
 	while (nb > 0)
 	{
 		c[i] = hex[nb % 16];
