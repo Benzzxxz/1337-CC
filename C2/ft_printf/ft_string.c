@@ -43,10 +43,12 @@ int	ft_putstr(char *s)
 {
 	if (!s)
 	{
-		write(1, "(null)", 6);
+		if (write(1, "(null)", 6) == -1)
+			return (-1);
 		return (6);
 	}
-	write(1, s, ft_strlen(s));
+	if (write(1, s, ft_strlen(s)) == -1)
+		return (-1);
 	return (ft_strlen(s));
 }
 

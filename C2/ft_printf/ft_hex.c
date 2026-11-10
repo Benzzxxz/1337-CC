@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	put_hex(long nb, int cs)
+int	put_hex(unsigned long nb, int cs)
 {
 	int		i;
 	char	*hex;

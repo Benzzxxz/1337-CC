@@ -29,7 +29,7 @@ static int	dispatcher(va_list v, char c)
 	if (c == 'u')
 		return (ft_putnbr(va_arg(v, unsigned int)));
 	if (c == '%')
-		return (ft_putchar('%'), 1);
+		return (ft_putchar('%'));
 	return (0);
 }
 
@@ -41,7 +41,7 @@ int	ft_printf(const char *format, ...)
 
 	count = 0;
 	i = 0;
-	if (!format)
+	if (!format || write(1, "", 0) == -1)
 		return (-1);
 	va_start(v, format);
 	while (format[i])
@@ -53,8 +53,6 @@ int	ft_printf(const char *format, ...)
 		}
 		else
 			count += ft_putchar(format[i]);
-		if (count == -1)
-			break ;
 		i++;
 	}
 	va_end(v);
