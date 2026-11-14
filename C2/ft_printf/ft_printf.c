@@ -58,3 +58,8 @@ int	ft_printf(const char *format, ...)
 	va_end(v);
 	return ((int)count);
 }
+int main()
+{
+	printf("   %d\n", printf("aaa%wppp"));
+	printf("   %d", ft_printf("aaa%wppp"));
+}

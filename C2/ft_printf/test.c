@@ -1,32 +1,56 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#include <stdarg.h>
-#include <stdio.h>
-
-int sum(int i, ...)
+static void show(const char *label, va_list v)
 {
-    va_list v;
-    va_start(v, i);
+	printf("%-22s gp=%-3u fp=%-3u reg_save=%p overflow=%p\n",
+		label, v->gp_offset, v->fp_offset,
+		(void *)v->reg_save_area, (void *)v->overflow_arg_area);
+}
 
-    int n = 0;
+int sum(int i, double d, ...)
+{
+	va_list	v;
+	int		a;
+	double	x;
 
-	unsigned long *t = v->overflow_arg_area;
-	unsigned long *y = v->reg_save_area;
-	printf("%p\n", y);
-	printf("%ld", *y);
-	printf("%ld", *(t));
-    va_end(v);
-    return (0);
+	(void)i;
+	(void)d;
+	va_start(v, d);
+	show("after va_start", v);
+
+	a = va_arg(v, int);
+	printf("int    -> %d\n", a);
+	show("after int #1", v);
+
+	a = va_arg(v, int);
+	printf("int    -> %d\n", a);
+	show("after int #2", v);
+
+	x = va_arg(v, double);
+	printf("double -> %f\n", x);
+	show("after double #1", v);
+
+	a = va_arg(v, int);
+	a = va_arg(v, int);
+	a = va_arg(v, int);
+	printf("int #5 -> %d\n", a);
+	show("after int #5", v);
+
+	a = va_arg(v, int);
+	printf("int #6 -> %d\n", a);
+	show("after int #6 (stack?)", v);
+
+	a = va_arg(v, int);
+	printf("int #7 -> %d\n", a);
+	show("after int #7", v);
+
+	va_end(v);
+	return (0);
 }
 
 int main(void)
 {
-    sum(9, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+	sum(13, 1.5, 1, 2, 3, 4, 5, 6, 7, 2.5, 3.5);
+	return (0);
 }
-typedef struct {
-unsigned int gp_offset; //* generel purpose registers
-unsigned int fp_offset; //? Vector register
-void *overflow_arg_area;
-void *reg_save_area;
-} va_list[1];
