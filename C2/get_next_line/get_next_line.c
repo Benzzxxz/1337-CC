@@ -12,36 +12,44 @@
 
 #include "get_next_line.h"
 
-char *check_line(char *leftover, char *s, int *counter)
+char	*search(char *str, int fd)
 {
-	while (s[*counter])
+	char	*buff;
+	int		rd;
+
+	buff = malloc(BUFFER_SIZE + 1);
+	if (!buff)
+		return (NULL);
+	buff[0] = '\0';
+	rd = 1;
+	if (ft_memchr(str, '\n'))
+		return (free(buff), str);
+	while (!ft_memchr(buff, '\n') && rd > 0)
 	{
-		if (s[*counter] == '\n')
-		{
-			leftover = get_leftover(s, *counter);
-			if (leftover != NULL)
-				return (ft_strjoin(get_line(s, *counter), leftover));
-			return (get_line(s, *counter));
-		}
-		counter++;
+		rd = read(fd, buff, BUFFER_SIZE);
+		if (rd == -1)
+			return (free(buff), free(str), NULL);
+		buff[rd] = '\0';
+		str = ft_strjoin(str, buff);
 	}
-	return (NULL);
+	free(buff);
+	return (str);
 }
 char *get_next_line(int fd)
 {
-	static char *leftover;
-	char	*s;
-	int counter;
+	static char	*lftvr;
+	char		*line;
+	char		*full_line;
 
-	leftover = NULL;
-	s = malloc(sizeof(char) * BUFFER_SIZE + 1);
-	counter = 0;
-	while (1)
-	{
-		read(fd, s, BUFFER_SIZE);
-		if (check_line(leftover, s, &counter))
-			return (check_line(leftover, s, &counter));
-		else
-			check_line(leftover, s, &counter);
-	}
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+	full_line = search(lftvr, fd);
+	if (!full_line)
+		return (NULL);
+	if (full_line[0] == '\0')
+		return (free(full_line), NULL);
+	line = ft_get_line(full_line);
+	lftvr = ft_get_lefovr(full_line);
+	free(full_line);
+	return(line);
 }
