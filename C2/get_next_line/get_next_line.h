@@ -21,12 +21,11 @@
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2);
 size_t	ft_strlen(const char *s);
-int	ft_memchr(char *s, char c);
+int		ft_memchr(char *s, char c);
 int		sepchr(char *s);
 char	*ft_get_line(char *s);
 size_t	ft_strlcpy(char *dst, char *src, size_t size);
 char	*ft_get_lefovr(char *s);
-
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 5

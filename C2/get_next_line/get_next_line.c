@@ -12,6 +12,63 @@
 
 #include "get_next_line.h"
 
+char	*ft_get_line(char *s)
+{
+	char	*line;
+	int		j;
+	int		i;
+
+	j = 0;
+	i = sepchr(s);
+	line = malloc(i + 1);
+	if (!line)
+		return (NULL);
+	while (j < i)
+	{
+		line[j] = s[j];
+		j++;
+	}
+	line[j] = '\0';
+	return (line);
+}
+
+char	*ft_get_lefovr(char *s)
+{
+	char	*lftvr;
+	int		j;
+	int		i;
+
+	i = 0;
+	j = sepchr(s);
+	lftvr = malloc(ft_strlen(s) - j + 1);
+	if (!lftvr)
+		return (NULL);
+	while (s[j])
+	{
+		lftvr[i] = s[j];
+		i++;
+		j++;
+	}
+	lftvr[i] = '\0';
+	return (lftvr);
+}
+
+int	ft_memchr(char *s, char c)
+{
+	size_t	i;
+
+	i = 0;
+	if (!s)
+		return (0);
+	while (s[i])
+	{
+		if (s[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	*search(char *str, int fd)
 {
 	char	*buff;
@@ -35,7 +92,8 @@ char	*search(char *str, int fd)
 	free(buff);
 	return (str);
 }
-char *get_next_line(int fd)
+
+char	*get_next_line(int fd)
 {
 	static char	*lftvr;
 	char		*line;
@@ -51,5 +109,5 @@ char *get_next_line(int fd)
 	line = ft_get_line(full_line);
 	lftvr = ft_get_lefovr(full_line);
 	free(full_line);
-	return(line);
+	return (line);
 }
