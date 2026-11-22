@@ -5,9 +5,9 @@ int main()
 {
 	int fd = open("test.txt", O_CREAT | O_RDWR);
 	int fd2 = open("README.md", O_RDONLY);
-
-	printf("fd : %d\nfd2 : %d", fd, fd2);
-	perror("open");
+	write(fd, "benzz", 5);
+	printf("fd : %d\nfd2 : %d\n", fd, fd2);
 	// printf("%s\n", get_next_line(fd));
-	// printf("%s", get_next_line(fd2));
+	lseek(fd, 0, SEEK_SET);
+	printf("%s", get_next_line(fd));
 }
