@@ -1,0 +1,18 @@
+==6912== 4,096 bytes in 1 blocks are still reachable in loss record 1 of 1
+==6912==    at 0x486A826: malloc (vg_replace_malloc.c:447)
+==6912==    by 0x4954DE2: _IO_file_doallocate (filedoalloc.c:91)
+==6912==    by 0x4965455: _IO_doallocbuf (genops.c:373)
+==6912==    by 0x4965455: _IO_doallocbuf (genops.c:368)
+==6912==    by 0x4963248: _IO_file_overflow@@GLIBC_2.2.5 (fileops.c:797)
+==6912==    by 0x4963F17: _IO_new_file_xsputn (fileops.c:1323)
+==6912==    by 0x4963F17: _IO_file_xsputn@@GLIBC_2.2.5 (fileops.c:1276)
+==6912==    by 0x492F555: __printf_buffer_flush_to_file (printf_buffer_to_file.c:59)
+==6912==    by 0x492F1E4: __printf_buffer_do_flush (printf_buffer_flush.c:53)
+==6912==    by 0x492F1E4: __printf_buffer_flush (Xprintf_buffer_flush.c:65)
+==6912==    by 0x492F6D8: __printf_buffer_write (Xprintf_buffer_write.c:33)
+==6912==    by 0x4938715: __printf_buffer (vfprintf-process-arg.c:471)
+==6912==    by 0x493AF03: __vfprintf_internal (vfprintf-internal.c:1548)
+==6912==    by 0x492ED02: printf (printf.c:33)
+==6912==    by 0x4011F5: main (in /home/benzz/1337-CC/C2/get_next_line/tst3/t42.esq)
+==6912== 
+==6912== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
